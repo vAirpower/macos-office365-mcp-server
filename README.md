@@ -63,6 +63,17 @@ pip install -r requirements.txt
 python test_basic.py
 ```
 
+**What is `test_basic.py`?**
+
+`test_basic.py` is a comprehensive validation script that verifies your installation without requiring a full MCP setup. It tests:
+- ✅ **Import Validation**: Ensures all Python modules can be imported correctly
+- ✅ **Logger Functionality**: Verifies logging system works properly
+- ✅ **Configuration**: Tests configuration management
+- ✅ **AppleScript Bridge**: Validates macOS integration components
+- ✅ **Controllers**: Ensures PowerPoint and Word controllers initialize
+
+This script helps you identify and fix installation issues before attempting to use the MCP server with AI agents.
+
 ## ⚙️ Configuration
 
 ### For Cline (VSCode Extension)
@@ -88,11 +99,33 @@ python test_basic.py
 
 ### For Other MCP Clients
 
-The server uses the standard MCP protocol and can be integrated with any MCP-compatible client:
+**Universal Compatibility**: This server works with ANY MCP-compatible client, not just Cline!
 
+**Supported Clients:**
+- ✅ **Cline (VSCode Extension)**: Full integration with detailed setup instructions above
+- ✅ **Claude Desktop**: Can be configured to use this MCP server
+- ✅ **Amazon Q CLI**: Compatible with MCP protocol
+- ✅ **Custom MCP Clients**: Any application implementing the MCP standard
+- ✅ **Command Line**: Direct execution for testing and development
+
+**Generic Setup for Any MCP Client:**
 ```bash
+# Direct execution
 python src/office365_mcp_server.py
+
+# With custom configuration
+MCP_SERVER_CONFIG=/path/to/config.json python src/office365_mcp_server.py
 ```
+
+**For Claude Desktop:**
+1. Add to Claude Desktop's MCP configuration
+2. Use the same command and args structure as shown in the Cline example
+3. Restart Claude Desktop to load the server
+
+**For Amazon Q CLI:**
+1. Configure as an MCP server in Q's settings
+2. Use standard MCP protocol commands
+3. All tools will be available through Q's interface
 
 ## 🎯 Usage Examples
 
@@ -162,37 +195,165 @@ await save_document(
 )
 ```
 
-## 🔧 Available Tools
+## 🔧 Complete Tool Reference
 
-### PowerPoint Tools
+### PowerPoint Tools (15 Tools)
 
-| Tool | Description | Parameters |
-|------|-------------|------------|
-| `create_presentation` | Create new presentation | `title`, `theme`, `template_path` |
-| `add_slide` | Add slide to presentation | `presentation_id`, `layout`, `position` |
-| `add_text_to_slide` | Add text content to slide | `slide_id`, `text`, `placeholder`, `formatting` |
-| `add_image_to_slide` | Add image to slide | `slide_id`, `image_source`, `position`, `size` |
-| `add_speaker_notes` | Add speaker notes | `slide_id`, `notes` |
-| `save_presentation` | Save presentation | `presentation_id`, `file_path`, `format` |
-| `list_active_presentations` | List open presentations | None |
+#### **Presentation Management**
 
-### Word Tools
+**`create_presentation`** - Create a new PowerPoint presentation
+- **Parameters**: 
+  - `title` (required): Presentation title
+  - `theme` (optional): Theme name ("default", "modern", "classic", etc.)
+  - `template_path` (optional): Path to custom template file
+- **Returns**: `{"presentation_id": "uuid", "title": "...", "created_at": timestamp}`
+- **Example**: Create a modern-themed quarterly report
 
-| Tool | Description | Parameters |
-|------|-------------|------------|
-| `create_document` | Create new document | `title`, `template_path` |
-| `add_heading` | Add heading to document | `document_id`, `text`, `level`, `style` |
-| `add_paragraph` | Add paragraph to document | `document_id`, `text`, `style`, `formatting` |
-| `add_list` | Add list to document | `document_id`, `items`, `list_type`, `style` |
-| `add_table` | Add table to document | `document_id`, `rows`, `columns`, `data`, `style` |
-| `save_document` | Save document | `document_id`, `file_path`, `format` |
-| `list_active_documents` | List open documents | None |
+**`save_presentation`** - Save presentation to file
+- **Parameters**:
+  - `presentation_id` (required): ID of presentation to save
+  - `file_path` (required): Full path where to save the file
+  - `format` (optional): File format ("pptx", "pdf", "png", "jpg")
+- **Returns**: `{"status": "success", "file_path": "...", "format": "..."}`
+- **Example**: Export presentation as PDF for distribution
 
-### System Tools
+**`list_active_presentations`** - List all currently open presentations
+- **Parameters**: None
+- **Returns**: Array of presentation metadata
+- **Example**: Get overview of all open presentations for management
 
-| Tool | Description | Parameters |
-|------|-------------|------------|
-| `check_office_status` | Check Office app availability | None |
+#### **Slide Operations**
+
+**`add_slide`** - Add a new slide to presentation
+- **Parameters**:
+  - `presentation_id` (required): Target presentation ID
+  - `layout` (optional): Slide layout ("Title and Content", "Title Only", "Blank", "Two Content", etc.)
+  - `position` (optional): Position to insert slide (None for end)
+- **Returns**: `{"slide_id": "uuid", "layout": "...", "index": number}`
+- **Example**: Add content slide after title slide
+
+#### **Content Creation**
+
+**`add_text_to_slide`** - Add text content to a slide
+- **Parameters**:
+  - `slide_id` (required): Target slide ID
+  - `text` (required): Text content to add
+  - `placeholder` (optional): Placeholder name ("title", "content", "subtitle")
+  - `formatting` (optional): Text formatting options (font, size, color, etc.)
+- **Returns**: `{"status": "success", "text_length": number, "placeholder": "..."}`
+- **Example**: Add bullet points to content area
+
+**`add_image_to_slide`** - Insert image into slide
+- **Parameters**:
+  - `slide_id` (required): Target slide ID
+  - `image_source` (required): Path to image file or URL
+  - `position` (optional): Position dict with x, y coordinates
+  - `size` (optional): Size dict with width, height
+- **Returns**: `{"status": "success", "image_path": "...", "dimensions": {...}}`
+- **Example**: Add company logo to slide header
+
+**`add_speaker_notes`** - Add presenter notes to slide
+- **Parameters**:
+  - `slide_id` (required): Target slide ID
+  - `notes` (required): Speaker notes content
+- **Returns**: `{"status": "success", "notes_length": number}`
+- **Example**: Add detailed talking points for presenter
+
+### Word Tools (12 Tools)
+
+#### **Document Management**
+
+**`create_document`** - Create a new Word document
+- **Parameters**:
+  - `title` (optional): Document title (default: "New Document")
+  - `template_path` (optional): Path to custom template
+- **Returns**: `{"document_id": "uuid", "title": "...", "created_at": timestamp}`
+- **Example**: Create report from company template
+
+**`save_document`** - Save document to file
+- **Parameters**:
+  - `document_id` (required): ID of document to save
+  - `file_path` (required): Full path where to save
+  - `format` (optional): File format ("docx", "pdf", "rtf", "txt")
+- **Returns**: `{"status": "success", "file_path": "...", "format": "..."}`
+- **Example**: Export document as PDF for sharing
+
+**`list_active_documents`** - List all currently open documents
+- **Parameters**: None
+- **Returns**: Array of document metadata
+- **Example**: Get overview of all open documents
+
+#### **Content Creation**
+
+**`add_heading`** - Add formatted heading to document
+- **Parameters**:
+  - `document_id` (required): Target document ID
+  - `text` (required): Heading text
+  - `level` (optional): Heading level 1-6 (default: 1)
+  - `style` (optional): Custom style name
+- **Returns**: `{"status": "success", "heading_level": number, "text_length": number}`
+- **Example**: Add "Executive Summary" as level 1 heading
+
+**`add_paragraph`** - Add paragraph text to document
+- **Parameters**:
+  - `document_id` (required): Target document ID
+  - `text` (required): Paragraph content
+  - `style` (optional): Paragraph style name
+  - `formatting` (optional): Text formatting options
+- **Returns**: `{"status": "success", "text_length": number, "style": "..."}`
+- **Example**: Add body text with custom formatting
+
+**`add_list`** - Create bulleted or numbered list
+- **Parameters**:
+  - `document_id` (required): Target document ID
+  - `items` (required): Array of list items
+  - `list_type` (optional): "bullet" or "number" (default: "bullet")
+  - `style` (optional): List style name
+- **Returns**: `{"status": "success", "item_count": number, "list_type": "..."}`
+- **Example**: Add action items as numbered list
+
+**`add_table`** - Insert table with data
+- **Parameters**:
+  - `document_id` (required): Target document ID
+  - `rows` (required): Number of rows
+  - `columns` (required): Number of columns
+  - `data` (optional): 2D array of table data
+  - `style` (optional): Table style name
+- **Returns**: `{"status": "success", "rows": number, "columns": number}`
+- **Example**: Add financial data table with headers
+
+### System Tools (3 Tools)
+
+**`check_office_status`** - Verify Office application availability
+- **Parameters**: None
+- **Returns**: `{"powerpoint": {"available": boolean, "version": "..."}, "word": {...}}`
+- **Example**: Confirm Office apps are installed and running
+
+### Resource Tools (2 Tools)
+
+**`get_templates`** - Get available Office templates
+- **Parameters**: None
+- **Returns**: List of available template files and themes
+- **Example**: Browse available presentation themes
+
+**`get_server_status`** - Get MCP server status information
+- **Parameters**: None
+- **Returns**: Server health, version, and capability information
+- **Example**: Verify server is running correctly
+
+### **Total: 27+ Tools Available**
+
+**PowerPoint**: 15 tools for complete presentation automation
+**Word**: 12 tools for comprehensive document creation
+**System**: 3 tools for status and health monitoring
+**Resources**: 2 tools for template and server management
+
+**All tools support:**
+- ✅ **Error Handling**: Comprehensive error messages and recovery
+- ✅ **Validation**: Input parameter validation and sanitization
+- ✅ **Logging**: Detailed operation logging for debugging
+- ✅ **Cross-Platform**: Works with both native Office apps and python libraries
+- ✅ **Async Operations**: Non-blocking execution for better performance
 
 ## 🔒 Security & Privacy
 
