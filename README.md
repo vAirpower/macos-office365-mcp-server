@@ -43,7 +43,7 @@ A comprehensive Model Context Protocol (MCP) server for automating Microsoft Off
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/macos-office365-mcp-server.git
+git clone https://github.com/vAirpower/macos-office365-mcp-server.git
 cd macos-office365-mcp-server
 ```
 
@@ -294,9 +294,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/macos-office365-mcp-server/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/macos-office365-mcp-server/discussions)
-- **Documentation**: [Wiki](https://github.com/yourusername/macos-office365-mcp-server/wiki)
+- **Issues**: [GitHub Issues](https://github.com/vAirpower/macos-office365-mcp-server/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/vAirpower/macos-office365-mcp-server/discussions)
+- **Documentation**: [Wiki](https://github.com/vAirpower/macos-office365-mcp-server/wiki)
 
 ## 🗺 Roadmap
 
