@@ -1,0 +1,46 @@
+# MCP Core Dependencies
+mcp>=1.0.0
+pydantic>=2.0.0
+typing-extensions>=4.0.0
+
+# Office Document Processing
+python-pptx>=0.6.21
+python-docx>=1.1.0
+Pillow>=10.0.0
+
+# AppleScript Integration (using built-in osascript command)
+# osascript>=2020.12.3  # Optional Python wrapper, we use subprocess instead
+pyobjc-framework-Cocoa>=10.0
+
+# Office 365 API Integration
+msal>=1.24.0
+requests>=2.31.0
+aiohttp>=3.8.0
+
+# Utilities
+pyyaml>=6.0
+python-dotenv>=1.0.0
+pathlib>=1.0.1
+
+# Logging and Monitoring
+structlog>=23.1.0
+rich>=13.0.0
+
+# Testing Dependencies
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-mock>=3.11.0
+
+# Development Dependencies
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0
+pre-commit>=3.3.0
+
+# Optional: Image Processing
+opencv-python>=4.8.0
+numpy>=1.24.0
+
+# Optional: Advanced Document Features
+reportlab>=4.0.0
+matplotlib>=3.7.0

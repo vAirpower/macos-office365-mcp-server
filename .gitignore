@@ -1,0 +1,119 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Office temporary files
+~$*.doc*
+~$*.xls*
+~$*.ppt*
+*.tmp
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Personal/Private files
+*_private*
+*_secret*
+*_personal*
+private/
+secrets/
+
+# MCP Settings (contains personal paths)
+cline_mcp_settings.json
+*mcp_settings*.json
+
+# Project-specific excludes
+OFFICE365_MCP_SERVER_PROJECT_PLAN.md
+*_PROJECT_PLAN.md
+*_ERROR_LOG.md
+
+# Test outputs
+test_output/
+tmp/
+temp/
+
+# Generated presentations/documents
+*.pptx
+*.docx
+*.pdf
+!examples/*.pptx
+!examples/*.docx
+
+# Cache
+.cache/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
