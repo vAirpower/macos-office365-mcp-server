@@ -10,44 +10,9 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
-# MCP imports
-try:
-    from mcp.server import FastMCP
-except ImportError:
-    # Fallback for different MCP versions
-    try:
-        from mcp import Server as FastMCP
-    except ImportError:
-        # Create a basic server implementation
-        class FastMCP:
-            def __init__(self, name):
-                self.name = name
-                self.tools = {}
-                self.resources = {}
-            
-            def tool(self):
-                def decorator(func):
-                    self.tools[func.__name__] = func
-                    return func
-                return decorator
-            
-            def resource(self, uri):
-                def decorator(func):
-                    self.resources[uri] = func
-                    return func
-                return decorator
-            
-            def run(self):
-                print(f"Starting {self.name}...")
-                print(f"Available tools: {list(self.tools.keys())}")
-                print(f"Available resources: {list(self.resources.keys())}")
-                # Basic server loop
-                import time
-                try:
-                    while True:
-                        time.sleep(1)
-                except KeyboardInterrupt:
-                    print("Server stopped.")
+# MCP imports - using the correct import path
+from mcp.server.fastmcp import FastMCP
+from mcp import Tool
 
 # Local imports
 from controllers.powerpoint_controller import PowerPointController
@@ -532,4 +497,5 @@ async def get_server_status() -> str:
 
 if __name__ == "__main__":
     logger.info("Starting Office 365 MCP Server...")
+    # Run the server using stdio transport
     mcp.run()

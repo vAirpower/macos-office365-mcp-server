@@ -5,6 +5,7 @@ Handles all Word automation operations on macOS.
 
 import asyncio
 import uuid
+import tempfile
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 import logging
@@ -28,7 +29,8 @@ class WordController:
     def __init__(self):
         self.applescript = AppleScriptBridge()
         self.active_documents: Dict[str, Dict[str, Any]] = {}
-        self.temp_dir = Path.home() / "tmp" / "office365_mcp"
+        # Use system temp directory with a subdirectory
+        self.temp_dir = Path(tempfile.gettempdir()) / "office365_mcp"
         self.temp_dir.mkdir(parents=True, exist_ok=True)
     
     async def create_document(
