@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Office 365 MCP Server for macOS
-A comprehensive MCP server for Microsoft PowerPoint and Word automation on macOS.
+A comprehensive MCP server for Microsoft PowerPoint, Word, and Excel automation on macOS.
 """
 
 import asyncio
@@ -17,6 +17,7 @@ from mcp import Tool
 # Local imports
 from controllers.powerpoint_controller import PowerPointController
 from controllers.word_controller import WordController
+from controllers.excel_controller import ExcelController
 from integrations.applescript_bridge import AppleScriptBridge
 from utils.config import Config
 from utils.logger import setup_logger
@@ -31,12 +32,14 @@ mcp = FastMCP("Office365 MCP Server")
 # Initialize controllers
 powerpoint = PowerPointController()
 word = WordController()
+excel = ExcelController()
 applescript = AppleScriptBridge()
 config = Config()
 
-# Track active documents/presentations
+# Track active documents/presentations/workbooks
 active_presentations: Dict[str, Any] = {}
 active_documents: Dict[str, Any] = {}
+active_workbooks: Dict[str, Any] = {}
 
 # PowerPoint Tools
 @mcp.tool()
@@ -421,6 +424,262 @@ async def save_document(
         logger.error(f"Failed to save document: {e}")
         raise
 
+# Excel Tools
+@mcp.tool()
+async def create_workbook(
+    title: str = "New Workbook",
+    template_path: Optional[str] = None
+) -> Dict[str, Any]:
+    """Create a new Excel workbook.
+    
+    Args:
+        title: Workbook title
+        template_path: Optional template file path
+        
+    Returns:
+        Dict with workbook_id and metadata
+    """
+    try:
+        result = await excel.create_workbook(
+            title=title,
+            template_path=template_path
+        )
+        
+        # Store in active workbooks
+        active_workbooks[result["workbook_id"]] = result
+        
+        logger.info(f"Created workbook: {title}")
+        return result
+        
+    except Exception as e:
+        logger.error(f"Failed to create workbook: {e}")
+        raise
+
+@mcp.tool()
+async def add_worksheet(
+    workbook_id: str,
+    sheet_name: str,
+    position: Optional[int] = None
+) -> Dict[str, Any]:
+    """Add a new worksheet to a workbook.
+    
+    Args:
+        workbook_id: ID of the workbook
+        sheet_name: Name for the new sheet
+        position: Position to insert sheet
+        
+    Returns:
+        Dict with worksheet metadata
+    """
+    try:
+        result = await excel.add_worksheet(
+            workbook_id=workbook_id,
+            sheet_name=sheet_name,
+            position=position
+        )
+        
+        logger.info(f"Added worksheet '{sheet_name}' to workbook {workbook_id}")
+        return result
+        
+    except Exception as e:
+        logger.error(f"Failed to add worksheet: {e}")
+        raise
+
+@mcp.tool()
+async def write_cell(
+    workbook_id: str,
+    sheet_name: str,
+    cell: str,
+    value: Any,
+    formatting: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]:
+    """Write data to a specific cell.
+    
+    Args:
+        workbook_id: ID of the workbook
+        sheet_name: Name of the worksheet
+        cell: Cell reference (e.g., 'A1')
+        value: Value to write
+        formatting: Optional formatting options
+        
+    Returns:
+        Dict with operation status
+    """
+    try:
+        result = await excel.write_cell(
+            workbook_id=workbook_id,
+            sheet_name=sheet_name,
+            cell=cell,
+            value=value,
+            formatting=formatting
+        )
+        
+        logger.info(f"Wrote value to cell {cell}")
+        return result
+        
+    except Exception as e:
+        logger.error(f"Failed to write cell: {e}")
+        raise
+
+@mcp.tool()
+async def write_range(
+    workbook_id: str,
+    sheet_name: str,
+    start_cell: str,
+    data: List[List[Any]],
+    formatting: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]:
+    """Write data to a range of cells.
+    
+    Args:
+        workbook_id: ID of the workbook
+        sheet_name: Name of the worksheet
+        start_cell: Starting cell reference
+        data: 2D list of values
+        formatting: Optional formatting options
+        
+    Returns:
+        Dict with operation status
+    """
+    try:
+        result = await excel.write_range(
+            workbook_id=workbook_id,
+            sheet_name=sheet_name,
+            start_cell=start_cell,
+            data=data,
+            formatting=formatting
+        )
+        
+        logger.info(f"Wrote data to range starting at {start_cell}")
+        return result
+        
+    except Exception as e:
+        logger.error(f"Failed to write range: {e}")
+        raise
+
+@mcp.tool()
+async def add_formula(
+    workbook_id: str,
+    sheet_name: str,
+    cell: str,
+    formula: str
+) -> Dict[str, Any]:
+    """Add a formula to a cell.
+    
+    Args:
+        workbook_id: ID of the workbook
+        sheet_name: Name of the worksheet
+        cell: Cell reference
+        formula: Excel formula (e.g., '=SUM(A1:A10)')
+        
+    Returns:
+        Dict with operation status
+    """
+    try:
+        result = await excel.add_formula(
+            workbook_id=workbook_id,
+            sheet_name=sheet_name,
+            cell=cell,
+            formula=formula
+        )
+        
+        logger.info(f"Added formula to cell {cell}")
+        return result
+        
+    except Exception as e:
+        logger.error(f"Failed to add formula: {e}")
+        raise
+
+@mcp.tool()
+async def create_chart(
+    workbook_id: str,
+    sheet_name: str,
+    chart_type: str,
+    data_range: str,
+    chart_title: str = "",
+    position: str = "E5"
+) -> Dict[str, Any]:
+    """Create a chart from data.
+    
+    Args:
+        workbook_id: ID of the workbook
+        sheet_name: Name of the worksheet
+        chart_type: Type of chart (bar, line, pie)
+        data_range: Data range (e.g., 'A1:B10')
+        chart_title: Title for the chart
+        position: Cell position for chart
+        
+    Returns:
+        Dict with operation status
+    """
+    try:
+        result = await excel.create_chart(
+            workbook_id=workbook_id,
+            sheet_name=sheet_name,
+            chart_type=chart_type,
+            data_range=data_range,
+            chart_title=chart_title,
+            position=position
+        )
+        
+        logger.info(f"Created {chart_type} chart at {position}")
+        return result
+        
+    except Exception as e:
+        logger.error(f"Failed to create chart: {e}")
+        raise
+
+@mcp.tool()
+async def save_workbook(
+    workbook_id: str,
+    file_path: str,
+    format: str = "xlsx"
+) -> Dict[str, Any]:
+    """Save a workbook to file.
+    
+    Args:
+        workbook_id: ID of the workbook
+        file_path: Path to save the file
+        format: File format (xlsx, xlsm, etc.)
+        
+    Returns:
+        Dict with operation status and file path
+    """
+    try:
+        result = await excel.save_workbook(
+            workbook_id=workbook_id,
+            file_path=file_path,
+            format=format
+        )
+        
+        logger.info(f"Saved workbook to {file_path}")
+        return result
+        
+    except Exception as e:
+        logger.error(f"Failed to save workbook: {e}")
+        raise
+
+@mcp.tool()
+async def list_worksheets(
+    workbook_id: str
+) -> List[str]:
+    """List all worksheets in a workbook.
+    
+    Args:
+        workbook_id: ID of the workbook
+        
+    Returns:
+        List of worksheet names
+    """
+    try:
+        result = await excel.list_worksheets(workbook_id)
+        logger.info(f"Listed worksheets for workbook {workbook_id}")
+        return result
+        
+    except Exception as e:
+        logger.error(f"Failed to list worksheets: {e}")
+        raise
+
 # Utility Tools
 @mcp.tool()
 async def list_active_presentations() -> List[Dict[str, Any]]:
@@ -441,6 +700,15 @@ async def list_active_documents() -> List[Dict[str, Any]]:
     return list(active_documents.values())
 
 @mcp.tool()
+async def list_active_workbooks() -> List[Dict[str, Any]]:
+    """List all active workbooks.
+    
+    Returns:
+        List of active workbook metadata
+    """
+    return list(active_workbooks.values())
+
+@mcp.tool()
 async def check_office_status() -> Dict[str, Any]:
     """Check if Office applications are available.
     
@@ -450,10 +718,13 @@ async def check_office_status() -> Dict[str, Any]:
     try:
         powerpoint_status = await applescript.check_powerpoint_status()
         word_status = await applescript.check_word_status()
+        # Note: Would need to implement check_excel_status in AppleScriptBridge
+        excel_status = False  # For now
         
         return {
             "powerpoint_available": powerpoint_status,
             "word_available": word_status,
+            "excel_available": excel_status,
             "server_status": "running"
         }
         
@@ -462,6 +733,7 @@ async def check_office_status() -> Dict[str, Any]:
         return {
             "powerpoint_available": False,
             "word_available": False,
+            "excel_available": False,
             "server_status": "error",
             "error": str(e)
         }
@@ -489,7 +761,8 @@ async def get_server_status() -> str:
     status = {
         "active_presentations": len(active_presentations),
         "active_documents": len(active_documents),
-        "server_version": "1.0.0",
+        "active_workbooks": len(active_workbooks),
+        "server_version": "1.1.0",
         "platform": "macOS"
     }
     
