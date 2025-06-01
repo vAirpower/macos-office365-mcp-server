@@ -1,6 +1,6 @@
 # macOS Office 365 MCP Server
 
-A comprehensive Model Context Protocol (MCP) server for automating Microsoft Office 365 applications (PowerPoint and Word) on macOS through AI agents like Claude and Cline.
+A Model Context Protocol (MCP) server for automating Microsoft Office 365 applications (PowerPoint and Word) on macOS through AI agents like Claude and Cline.
 
 ## 🚀 Features
 
