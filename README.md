@@ -355,6 +355,54 @@ await save_document(
 - ✅ **Cross-Platform**: Works with both native Office apps and python libraries
 - ✅ **Async Operations**: Non-blocking execution for better performance
 
+## ⚠️ **Known Limitations & Expectations**
+
+### **Current Implementation Status**
+
+**✅ What Works Out of the Box:**
+- ✅ **Basic Document Creation**: PowerPoint and Word files via python-pptx/docx
+- ✅ **Text and Content**: Add text, images, tables, lists to documents
+- ✅ **File Operations**: Save presentations and documents in multiple formats
+- ✅ **MCP Integration**: Works with Cline, Claude Desktop, and other MCP clients
+- ✅ **Cross-Platform Libraries**: Functions without Office apps installed
+
+**⚠️ Advanced Features (Require Setup):**
+- ⚠️ **Live Office Integration**: Requires Microsoft Office apps + accessibility permissions
+- ⚠️ **AppleScript Features**: Needs macOS permissions and running Office applications
+- ⚠️ **PDF Export**: Limited without Office apps (saves as PPTX/DOCX instead)
+- ⚠️ **Advanced Formatting**: Some features require Office app integration
+
+**❌ Current Limitations:**
+- ❌ **Excel Automation**: Not yet implemented (roadmap item)
+- ❌ **Outlook Integration**: Not yet implemented (roadmap item)
+- ❌ **Cloud Storage**: No direct OneDrive/SharePoint integration
+- ❌ **Real-time Collaboration**: No multi-user editing support
+
+### **Developer Success Expectations**
+
+**Beginner Developers (30 min setup):**
+- Can create basic presentations and documents
+- Works with python-pptx/docx libraries immediately
+- No Office apps required for basic functionality
+
+**Intermediate Developers (1-2 hours setup):**
+- Can integrate with MCP clients successfully
+- Can add advanced content and formatting
+- Can troubleshoot permission and compatibility issues
+
+**Advanced Developers (2-4 hours setup):**
+- Can enable full AppleScript integration
+- Can customize and extend functionality
+- Can contribute improvements and fixes
+
+### **Recommended Development Path**
+
+1. **Start Simple**: Use python-pptx/docx features first
+2. **Test Integration**: Verify MCP client compatibility
+3. **Add Office Apps**: Install Microsoft Office for advanced features
+4. **Enable Permissions**: Set up macOS accessibility for AppleScript
+5. **Customize**: Extend functionality for specific use cases
+
 ## 🔒 Security & Privacy
 
 ### What's Included
