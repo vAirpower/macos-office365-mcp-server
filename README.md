@@ -1,6 +1,8 @@
 # macOS Office 365 MCP Server
 
-A Model Context Protocol (MCP) server that enables AI assistants to create and manipulate Microsoft Office documents (PowerPoint, Word, and Excel) on macOS.
+A Model Context Protocol (MCP) server that enables AI assistants to create and manipulate Microsoft Office documents (PowerPoint, Word, and Excel) on macOS. This is a Proof of Concept and a personal project that is not an official MCP Server.  Let me know if you have any issues.  
+
+LinkedIn: https://www.linkedin.com/in/bluhmadam/ 
 
 ## Features
 
