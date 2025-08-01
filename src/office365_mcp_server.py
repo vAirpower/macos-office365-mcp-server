@@ -2,6 +2,7 @@
 """
 Office 365 MCP Server for macOS
 A comprehensive MCP server for Microsoft PowerPoint, Word, and Excel automation on macOS.
+By: Adam Bluhm
 """
 
 import asyncio
